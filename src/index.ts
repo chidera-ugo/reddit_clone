@@ -6,10 +6,15 @@ import { ApolloServer } from "apollo-server-express"
 import { buildSchema } from "type-graphql"
 import { HelloResolver } from "./resolvers/hello"
 import { PostResolver } from "./resolvers/post"
+import dotenv from "dotenv"
 
 const main = async () => {
 	const orm = await MikroORM.init(mikroConfig)
 	await orm.getMigrator().up()
+
+	dotenv.config()
+
+	const PORT = process.env.PORT || 4000
 
 	const app = express()
 
@@ -24,8 +29,8 @@ const main = async () => {
 	await apolloServer.start()
 	apolloServer.applyMiddleware({ app })
 
-	app.listen(4000, () => {
-		console.log("Listening on port 4000")
+	app.listen(PORT, () => {
+		console.log(`Listening on port ${PORT}`)
 	})
 }
 
